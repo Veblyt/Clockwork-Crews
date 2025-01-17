@@ -22,6 +22,20 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        if(other.gameObject.CompareTag("Ground"))
+            {
+                Vector3 normal = other.GetContact(0).normal;
+                if(normal == Vector3.up)
+                    {
+                    grounded = true;
+                    }
+            }
+        if(other.gameObject.CompareTag("Ground"))
+            {
+                grounded = false;
+            }
+
         /* Could also implement sideways movement so that
          if a left or right key is pressed the character turns
           that way respectively and so the character would then
@@ -60,23 +74,4 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     
-        private void OnCollisionEnter(Collision2D other)
-        {
-            if(other.gameObject.CompareTag("Ground"))
-            {
-                Vector3 normal = other.GetContact(0).normal;
-                if(normal == Vector3.up)
-                    {
-                    grounded = true;
-                    }
-            }
-        }
-        
-        private void OnCollisionExit(Collision2D other)
-        {
-            if(other.gameObject.CompareTag("Ground"))
-            {
-                grounded = false;
-            }
-        }
 }
