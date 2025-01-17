@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
     float moveForce = 2;
     float jumpForce = 5;
+    public bool grounded;
     Animator anim;
     SpriteRenderer spr;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -21,32 +22,37 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Physics2D.BoxCast(transform.position, 0.5f, Vector2.down, 0.05f);
         /* Could also implement sideways movement so that
          if a left or right key is pressed the character turns
           that way respectively and so the character would then
            move in the direction they're facing. */
 
         //Sideways Movement
-        rb.AddForce(transform.right * moveForce * Input.GetAxis("Horizontal"), ForceMode2D.Force);
-        if(rb.linearVelocityX < -.5f || rb.linearVelocityX > .5f){
-            anim.SetBool("IsWalking",true);
-        }
-        else{
-            anim.SetBool("IsWalking",false);
-        }
-
-        if(rb.linearVelocityX > 0.1f) {
-            spr.flipX = false;
-        }   
-        else{
-            spr.flipX = true;
+        if(grounded){
+            rb.AddForce(transform.right * moveForce * Input.GetAxis("Horizontal"), ForceMode2D.Force);
+            if(rb.linearVelocityX < -.5f || rb.linearVelocityX > .5f){
+                anim.SetBool("IsWalking",true);
+            }
+            else{
+                anim.SetBool("IsWalking",false);
+            }
+    
+            if(rb.linearVelocityX > 0.1f) {
+                spr.flipX = true;
+            }   
+            else{
+                spr.flipX = false;
+            }
         }
 
         //Jumping
-        if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W))
-        {
-            rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
-            anim.SetTrigger("Jump");
+        if(grounded){
+            if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W))
+            {
+                rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+                anim.SetTrigger("Jump");
+            }
         }
 
         //Attack (Will probably make this the tool interact)
