@@ -8,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
     Rigidbody2D rb;
     float moveForce = 5;
     float jumpForce = 10;
-    bool grounded;
     Animator anim;
     SpriteRenderer spr;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -23,26 +22,13 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
 
-        if(other.gameObject.CompareTag("Ground"))
-            {
-                Vector3 normal = other.GetContact(0).normal;
-                if(normal == Vector3.up)
-                    {
-                    grounded = true;
-                    }
-            }
-        if(other.gameObject.CompareTag("Ground"))
-            {
-                grounded = false;
-            }
-
         /* Could also implement sideways movement so that
          if a left or right key is pressed the character turns
           that way respectively and so the character would then
            move in the direction they're facing. */
 
         //Sideways Movement
-        if(grounded){
+        
             rb.AddForce(transform.right * moveForce * Input.GetAxis("Horizontal"), ForceMode2D.Force);
             if(rb.linearVelocityX < -.5f || rb.linearVelocityX > .5f){
                 anim.SetBool("IsWalking",true);
@@ -57,16 +43,14 @@ public class PlayerMovement : MonoBehaviour
             else{
                 spr.flipX = false;
             }
-        }
+        
 
         //Jumping
-        if(grounded){
             if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W))
             {
                 rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
                 anim.SetTrigger("Jump");
             }
-        }
 
         //Attack (Will probably make this the tool interact)
         if(Input.GetKeyDown(KeyCode.E)){
