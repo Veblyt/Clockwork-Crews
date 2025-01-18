@@ -43,10 +43,6 @@ public class PlayerMovement : MonoBehaviour
                 spr.flipX = false;
             }
 
-        //Attack (Will probably make this the tool interact)
-        if(Input.GetKeyDown(KeyCode.E)){
-            anim.SetTrigger("Attack");
-        }
     }
     
 }
