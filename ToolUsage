@@ -46,3 +46,62 @@ public class ToolUsage : MonoBehaviour
     }
 
 }
+
+
+using UnityEngine;
+
+public class ToolUsage : MonoBehaviour
+{
+    private Rigidbody2D rb;
+    private SpriteRenderer spr;
+    private Animator anim;
+
+    public GameObject OilCan; // Reference to the Oil Can object
+    private bool oilcan;      // Indicates if the player is holding the Oil Can
+    private bool nearOilCan;  // Indicates if the player is near the Oil Can
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        spr = GetComponent<SpriteRenderer>();
+    }
+
+    void Update()
+    {
+        // Check for interaction key press
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            if (nearOilCan) // If near the oil can
+            {
+                if (!oilcan) // Pick up the oil can
+                {
+                    oilcan = true;
+                    OilCan.SetActive(false); // Make it invisible
+                }
+                else // Drop the oil can
+                {
+                    oilcan = false;
+                    OilCan.SetActive(true); // Make it visible
+                    OilCan.transform.position = transform.position + Vector3.right; // Drop it near the player
+                }
+            }
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("OilCan"))
+        {
+            nearOilCan = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("OilCan"))
+        {
+            nearOilCan = false;
+        }
+    }
+}
