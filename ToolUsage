@@ -83,7 +83,6 @@ public class ToolUsage : MonoBehaviour
                 {
                     oilcan = false;
                     OilCan.SetActive(true); // Make it visible
-                    OilCan.transform.position = transform.position + Vector3.right; // Drop it near the player
                 }
             }
         }
