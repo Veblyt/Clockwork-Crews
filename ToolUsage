@@ -1,3 +1,4 @@
+using UnityEditor.Animations;
 using UnityEngine;
 
 public class ToolUsage : MonoBehaviour
@@ -9,15 +10,22 @@ public class ToolUsage : MonoBehaviour
     public GameObject OilCan; // Reference to the Oil Can object
     private bool oilcan;      // Indicates if the player is holding the Oil Can
     private bool nearOilCan;  // Indicates if the player is near the Oil Can
+    float oilcanUses;
 
-public GameObject Wrench;
+    public GameObject Wrench;
     private bool wrench;      
     private bool nearWrench;
+    float wrenchUses;
+
+    public Animator currentCog;
+    private bool nearCog;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spr = GetComponent<SpriteRenderer>();
+        oilcanUses = 0;
+        wrenchUses = 0;
     }
 
     void Update()
@@ -54,6 +62,18 @@ public GameObject Wrench;
             }
             
         }
+
+        if(nearCog && (wrenchUses <= 1 || oilcanUses <= 1) && (Input.GetKeyDown(KeyCode.Q)))
+        {
+            anim.SetTrigger("Fix");
+            currentCog.SetTrigger("UseOil");
+
+        }
+        if(nearCog && (wrenchUses <= 5 || oilcanUses <= 5) && (Input.GetKeyDown(KeyCode.Q)))
+        {
+            anim.SetTrigger("Fix");
+            currentCog.SetTrigger("UseWrench");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -67,6 +87,12 @@ public GameObject Wrench;
         {
             nearWrench = true;
         }
+
+        if(collision.CompareTag("Cog"))
+        {
+            nearCog = true;
+            currentCog = collision.GetComponent<Animator>();
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -79,6 +105,16 @@ public GameObject Wrench;
         if(collision.CompareTag("Wrench"))
         {
             nearWrench = false;
+        }
+
+        if(collision.CompareTag("Cog"))
+        {
+            if(currentCog == collision.GetComponent<Animator>())
+            {
+                currentCog = null;
+            }
+            nearCog = false;
+            
         }
     }
 }
