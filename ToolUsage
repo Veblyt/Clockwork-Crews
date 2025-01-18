@@ -1,0 +1,48 @@
+using UnityEngine;
+
+public class ToolUsage : MonoBehaviour
+{
+    Rigidbody2D rb;
+    SpriteRenderer spr;
+    Animator anim;
+
+    bool oilcan;
+    bool wrench;
+    bool rag;
+    bool hammer;
+
+    public GameObject OilCan;
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        spr = GetComponent<SpriteRenderer>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    private void HasOilCan(Collider2D collision)
+    {
+        if(collision.CompareTag("OilCan") && Input.GetKeyDown(KeyCode.E))
+        {
+            if(OilCan.activeInHierarchy == true)
+            {
+                oilcan = true;
+                OilCan.SetActive(false);
+            }
+                
+            if((OilCan.activeInHierarchy == false) && Input.GetKeyDown(KeyCode.E))
+            {
+                oilcan = false;
+                OilCan.SetActive(true);
+            }
+
+        }
+    }
+
+}
