@@ -1,0 +1,43 @@
+using System;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class PlayerJump : MonoBehaviour
+{
+    Rigidbody2D rb;
+    SpriteRenderer spr;
+    float jumpForce = 20;
+    Animator anim;
+    float playerHalfHeight;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        spr = GetComponent<SpriteRenderer>();
+        playerHalfHeight = spr.bounds.extents.y;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Ground Checking
+        if((Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && GetIsGrounded())
+        {
+            Jump();
+        }
+
+    }
+
+    private bool GetIsGrounded()
+    {
+        return Physics2D.Raycast(transform.position, Vector2.down, playerHalfHeight + 0.1f, LayerMask.GetMask("Ground"));
+    }
+
+    private void Jump()
+    {
+        rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+        anim.SetTrigger("Jump");
+    }
+}
