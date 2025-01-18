@@ -2,56 +2,6 @@ using UnityEngine;
 
 public class ToolUsage : MonoBehaviour
 {
-    Rigidbody2D rb;
-    SpriteRenderer spr;
-    Animator anim;
-
-    bool oilcan;
-    bool wrench;
-    bool rag;
-    bool hammer;
-
-    public GameObject OilCan;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        spr = GetComponent<SpriteRenderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void HasOilCan(Collider2D collision)
-    {
-        if(collision.CompareTag("OilCan") && Input.GetKeyDown(KeyCode.E))
-        {
-            if(OilCan.activeInHierarchy == true)
-            {
-                oilcan = true;
-                OilCan.SetActive(false);
-            }
-                
-            if((OilCan.activeInHierarchy == false) && Input.GetKeyDown(KeyCode.E))
-            {
-                oilcan = false;
-                OilCan.SetActive(true);
-            }
-
-        }
-    }
-
-}
-
-
-using UnityEngine;
-
-public class ToolUsage : MonoBehaviour
-{
     private Rigidbody2D rb;
     private SpriteRenderer spr;
     private Animator anim;
@@ -60,6 +10,9 @@ public class ToolUsage : MonoBehaviour
     private bool oilcan;      // Indicates if the player is holding the Oil Can
     private bool nearOilCan;  // Indicates if the player is near the Oil Can
 
+public GameObject Wrench;
+    private bool wrench;      
+    private bool nearWrench;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -79,12 +32,27 @@ public class ToolUsage : MonoBehaviour
                     oilcan = true;
                     OilCan.SetActive(false); // Make it invisible
                 }
-                else // Drop the oil can
+            }
+            else // Drop the oil can
+            {
+                oilcan = false;
+                OilCan.SetActive(true); // Make it visible
+            }
+
+            if (nearWrench)
+            {
+                if(!wrench)
                 {
-                    oilcan = false;
-                    OilCan.SetActive(true); // Make it visible
+                    wrench = true;
+                    Wrench.SetActive(false);
                 }
             }
+            else
+            {
+                wrench = false;
+                Wrench.SetActive(true);
+            }
+            
         }
     }
 
@@ -94,6 +62,11 @@ public class ToolUsage : MonoBehaviour
         {
             nearOilCan = true;
         }
+
+        if(collision.CompareTag("Wrench"))
+        {
+            nearWrench = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -101,6 +74,11 @@ public class ToolUsage : MonoBehaviour
         if (collision.CompareTag("OilCan"))
         {
             nearOilCan = false;
+        }
+
+        if(collision.CompareTag("Wrench"))
+        {
+            nearWrench = false;
         }
     }
 }
