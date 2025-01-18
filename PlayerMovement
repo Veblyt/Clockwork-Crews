@@ -7,7 +7,6 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody2D rb;
     float moveForce = 5;
-    float jumpForce = 10;
     Animator anim;
     SpriteRenderer spr;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -42,14 +41,6 @@ public class PlayerMovement : MonoBehaviour
             }   
             else{
                 spr.flipX = false;
-            }
-        
-
-        //Jumping
-            if(Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W))
-            {
-                rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
-                anim.SetTrigger("Jump");
             }
 
         //Attack (Will probably make this the tool interact)
