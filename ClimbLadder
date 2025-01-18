@@ -1,0 +1,67 @@
+using System;
+using System.Numerics;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class ClimbLadder : MonoBehaviour
+{
+    Rigidbody2D rb;
+    SpriteRenderer spr;
+    Animator anim;
+
+    float vertical;
+    float speed = 12;
+    bool isLadder;
+    bool isClimbing;
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        spr = GetComponent<SpriteRenderer>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        vertical = Input.GetAxis("Vertical");
+        
+        if(isLadder && Mathf.Abs(vertical) > 0f)
+        {
+            isClimbing = true;
+            anim.SetTrigger("Climb");
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (isClimbing)
+        {
+            rb.gravityScale = 0f;
+            rb.linearVelocity = new UnityEngine.Vector2(rb.linearVelocity.x, vertical *speed);
+        }
+        else 
+        {
+            rb.gravityScale = 2;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Ladder"))
+        {
+            isLadder = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Ladder"))
+        {
+            isLadder = false;
+            isClimbing = false;
+        }
+    }
+}
