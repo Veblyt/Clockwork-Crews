@@ -30,14 +30,14 @@ public class PlayerMovement : MonoBehaviour
         //Sideways Movement
         
             rb.AddForce(transform.right * moveForce * Input.GetAxis("Horizontal"), ForceMode2D.Force);
-            if(rb.linearVelocityX < -.5f || rb.linearVelocityX > .5f){
+            if(rb.linearVelocityX < -1f || rb.linearVelocityX > 1f){
                 anim.SetBool("IsWalking",true);
             }
             else{
                 anim.SetBool("IsWalking",false);
             }
     
-            if(rb.linearVelocityX > 0.1f) {
+            if(rb.linearVelocityX < 2f) {
                 spr.flipX = true;
             }   
             else{
